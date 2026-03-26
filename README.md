@@ -6,7 +6,7 @@ To load the plugin, simply download fishROI.py and drag it into FIJI2, then clic
 
 If Labkit is required (for shallow learning based image segmentation), install it in FIJI by going to help > Update ImageJ > Manage Update Sites > (tick “Labkit”) > Apply and Close. Labkit User guide can be found here: (https://imagej.net/plugins/labkit/)
 
-If Cellpose is required (for deep learning based image segmentation), see installation guide here: (https://github.com/mouseland/cellpose). Our pre-trained cellpose models can be found on Zenodo (insert link).
+If Cellpose is required (for deep learning based image segmentation), see installation guide here: (https://github.com/mouseland/cellpose). Our pre-trained cellpose models can be found on Zenodo (https://zenodo.org/records/19223252?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImE2NjA1YTJmLTNhNjgtNGZmZC1iODQ4LTM1OTlhY2E0NGUzMiIsImRhdGEiOnt9LCJyYW5kb20iOiI3ZjhlMmFiZTc4MTUyZjg0MWE0MjljNjg3NWJlZDYxYSJ9.vT7prxfzLqJKD6V7jc4xR2bBw4EOv4-Zy8qudNFKk9dSOfcDHSF0k4zPRFWlauXq53WKIKGq83ZJTHRpYUPH2A).
 
 If Julia is required (for mosaicism analysis), download Julia here: (https://julialang.org/downloads/). When running Julia for the first time, first type ] to open package manager. Terminal line should now display:
 
