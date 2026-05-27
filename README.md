@@ -1,6 +1,6 @@
 fishROI user guide:
 
-A preprint describing the usage of this FIJI/ImageJ2 plugin can be found on BioRxiv (insert link).
+A preprint describing the usage of this FIJI/ImageJ2 plugin can be found on BioRxiv (https://doi.org/10.64898/2026.03.27.714781).
 
 To load the plugin, simply download fishROI.py and drag it into FIJI2, then click run on the lower left corner of the FIJI script editor. Since our plugin is highly modular, you may choose the functions you want to run by ticking specific boxes or inputting the relevant text into corresponding areas of the graphical user interface. Leave any functionality you don’t need blank. You can always come back for them later. Some example parameters this macro can analyse include area (input “Area”), circularity (input “Circ.”), intensity (inputs “Mean”, “Max”, “Min”). Detailed explanations for the usage of each module can be found on our print.
 
