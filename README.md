@@ -1,4 +1,8 @@
-**Update:** If you have access to Claude AI, please navigate to the Claude_skill branch and install the skill. This will make the workflow completely automated. All key information have been fed into Claude, so you will no longer need to read our paper, or the user guide below. Just feed in your images and tell it to run!
+**Update (July 2026):** 
+
+If you have access to Claude AI, please navigate to the Claude_skill branch and install the skill. This will make the workflow completely automated. All key information have been fed into Claude, so you will no longer need to read our paper, or the user guide below. Just feed in your images and tell it to run!
+
+
 
 **fishROI user guide:**
 
