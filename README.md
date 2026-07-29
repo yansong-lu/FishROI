@@ -1,6 +1,6 @@
-Update: If you have access to Claude AI, please navigate the to the Claude_skill branch and install the skill. This will make the workflow completed automated.
+**Update:** If you have access to Claude AI, please navigate the to the Claude_skill branch and install the skill. This will make the workflow completed automated.
 
-fishROI user guide:
+**fishROI user guide:**
 
 A preprint describing the usage of this FIJI/ImageJ2 plugin can be found on BioRxiv (https://doi.org/10.64898/2026.03.27.714781).
 
