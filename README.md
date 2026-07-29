@@ -47,3 +47,42 @@ include("MuscleMosaicism_v3.jl")
 
 If you run into any issues, feel free to reach out to me @yansong.lu@monash.edu or KLu@stowers.org.
 
+---
+
+## Headless automation, HPC & Claude skill (`automation/`, `skill/`)
+
+The interactive plugin above can also be run **fully headless** for batch/HPC use, while keeping an
+optional manual-curation step. See `CLAUDE.md` for a map of the repo.
+
+```bash
+pip install tifffile numpy pandas scikit-image scipy matplotlib roifile opencv-python-headless
+pip install "cellpose<4" torch      # pin <4: cellpose 4.x is SAM and breaks the rerio/cyto3 models
+
+# one command: segment (Cellpose rerio) -> FIJI-identical measure -> area heatmap -> Julia CoV.
+# The rerio model is fetched + md5-verified automatically; Fiji is auto-detected (installed if absent).
+python automation/fishroi_run_all.py \
+    --image "DR test image.tif" --outdir out/ --seg-channel 1 \
+    --julia-script MuscleMosaicism_v3.jl        # omit to skip the CoV step
+```
+
+Outputs per image: `*_rois.zip`, a FIJI-identical `*_measurements.csv`, `*_area_heatmap.png/.tif`
+(the paper's inverted `phase` LUT with a min/max scale bar), and Julia µ/σ/CoV maps in `out/julia/`.
+
+**Manual curation (the plugin's Step 2).** Split the run and curate ROIs between the halves:
+
+```bash
+python automation/fishroi_run_all.py --image img.tif --outdir out/ --segment-only          # Phase A
+"$FIJI" --run automation/fishroi_curate.py 'image="img.tif",roizip="out/img_rois.zip"'      # curate (GUI)
+python automation/fishroi_run_all.py --image img.tif --outdir out/ --roizip out/img_rois.zip \
+    --julia-script MuscleMosaicism_v3.jl                                                     # Phase B
+```
+
+**HPC.** `automation/hpc/` has generic SLURM templates (GPU segment array → CPU analyze array).
+
+**No FIJI?** `automation/fishroi_auto.py` runs a pure-Python pipeline (scikit-image measurements,
+~5–10% off the plugin's absolute area/circularity; CoV ~2%). Use `fishroi_run_all.py` for
+plugin-identical numbers.
+
+**Claude skill.** `skill/fishROI_v2/` guides an AI agent (or a person) through setup and the whole
+workflow; `skill/fishROI_v2/references/paper-summary.md` is a condensed summary of the paper.
+

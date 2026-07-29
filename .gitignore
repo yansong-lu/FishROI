@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# fishROI runtime outputs & caches
+out/
+results/
+fishroi_out/
+*_rois_clean.zip
+.cache/
+fishroi_cache/
+
+# OS
+.DS_Store
