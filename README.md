@@ -1,6 +1,10 @@
-Update: Now introducing Claude skill to fully automate the dependency installation and running the workflow. Just install the skill on Claude AI and ask it to process your images for you! No longer do you need to touch any code again!
+Update: 
 
-Note: For large images, a High Performance Computing (HPC) cluster containing GPUs is recommended. Claude will generate a SLURM script with instructions for you to run, but you will still need an HPC cluster account. You should also provide an example SLURM script for your cluster to Claude, so that the syntax can be adjusted.
+Now introducing Claude skill to fully automate the dependency installation and running the workflow. Just install the skill on Claude AI and ask it to process your images for you! No longer do you need to touch any code again!
+
+Note: 
+
+For large images, a High Performance Computing (HPC) cluster containing GPUs is recommended. Claude will generate a SLURM script with instructions for you to run, but you will still need an HPC cluster account. You should also provide an example SLURM script for your cluster to Claude, so that the syntax can be adjusted.
 
 fishROI user guide:
 
