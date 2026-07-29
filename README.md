@@ -1,4 +1,4 @@
-**Update:** If you have access to Claude AI, please navigate the to the Claude_skill branch and install the skill. This will make the workflow completed automated.
+**Update:** If you have access to Claude AI, please navigate to the Claude_skill branch and install the skill. This will make the workflow completed automated.
 
 **fishROI user guide:**
 
