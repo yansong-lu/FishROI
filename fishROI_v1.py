@@ -991,10 +991,32 @@ def make_scalebar_button(event):
     newThread.start()
     IJ.log("Generating scalebar, please wait.")
 
+CELLPOSE_REPO_URL = r"https://github.com/yansong-lu/FishROI"
+cellpose_instruction_frame = None
+
+def _cellpose_open_url(url):
+    """Open a URL in the system browser without blocking the EDT."""
+    try:
+        from ij.plugin import BrowserLauncher
+        BrowserLauncher.openURL(url)
+    except:
+        IJ.log("Please open this URL manually: " + url)
+
+def _cellpose_open_github(event):
+    _cellpose_open_url(CELLPOSE_REPO_URL)
+
+def _cellpose_close_instructions(event):
+    if cellpose_instruction_frame is not None:
+        cellpose_instruction_frame.setVisible(False)
+
 def cellpose_instruction_button(event):
-    """Show a summary of the standalone Cellpose (deep-learning) route and link to full instructions."""
-    # Cellpose runs outside FIJI; this button summarises the round-trip and links to the online manual.
-    repo_url = r"https://github.com/yansong-lu/FishROI"
+    """Show a NON-MODAL window summarising the standalone Cellpose route.
+
+    Uses a JFrame (like the plugin's other instruction windows) rather than a
+    GenericDialog: this handler runs on the Swing EDT, and showDialog() would
+    block the EDT and freeze FIJI. A JFrame is non-modal and returns immediately.
+    """
+    # Cellpose runs outside FIJI; this button summarises the round-trip and links to the manual.
     steps = (
         "Cellpose (deep-learning segmentation) runs OUTSIDE FIJI; its ROIs are then loaded back in.\n \n"
         "1. Install Cellpose in a Python environment (pin cellpose<4):\n"
@@ -1007,14 +1029,53 @@ def cellpose_instruction_button(event):
         "   It writes ImageJ-format ROI .zip files (one per image).\n"
         "4. Back in FIJI: open the ORIGINAL image, then ROI Manager -> More >> -> Open the\n"
         "   matching ROI .zip, and continue with Step 2 (cleanup) / Step 3 / Step 4.\n \n"
-        "To TRAIN your own model, use 'Convert ROI to Mask' to export curated ROIs as label-mask\n"
-        "PNGs. Full instructions: click Help below, or see run_cellpose.py and the user manual on GitHub."
+        "To TRAIN your own model, use 'Convert ROI to Mask' to export curated ROIs as label-mask PNGs."
     )
-    IJ.log(steps)
-    gd = NonBlockingGenericDialog("Cellpose Instructions")
-    gd.addHelp(repo_url)
-    gd.addMessage(steps)
-    gd.showDialog()
+    IJ.log(steps)  # keep a copy in the Log for easy copy/paste of the URLs
+
+    html = ("<html><div style='width:470px;font-family:sans-serif'>"
+            "<b>Cellpose (deep-learning segmentation) runs OUTSIDE FIJI</b>; its ROIs are then loaded back in.<br/><br/>"
+            "1.&nbsp;Install Cellpose in a Python env (pin <tt>cellpose&lt;4</tt>):<br/>"
+            "&nbsp;&nbsp;&nbsp;<tt>pip install \"cellpose&lt;4\"</tt><br/>"
+            "&nbsp;&nbsp;&nbsp;guide: https://github.com/MouseLand/cellpose<br/>"
+            "2.&nbsp;Get a model: stock <tt>cyto3</tt>, or our zebrafish <tt>rerio</tt> model from Zenodo<br/>"
+            "&nbsp;&nbsp;&nbsp;(https://doi.org/10.5281/zenodo.19223252)<br/>"
+            "3.&nbsp;Edit the parameter block atop <tt>run_cellpose.py</tt>, then run<br/>"
+            "&nbsp;&nbsp;&nbsp;<tt>python run_cellpose.py</tt> &rarr; ImageJ ROI .zip files<br/>"
+            "4.&nbsp;Back in FIJI: open the ORIGINAL image, ROI Manager &raquo; More &raquo; Open the .zip,<br/>"
+            "&nbsp;&nbsp;&nbsp;then continue with Step 2 / Step 3 / Step 4.<br/><br/>"
+            "To train your own model, use <b>Convert ROI to Mask</b> to export curated ROIs.<br/>"
+            "Full instructions and code are on GitHub."
+            "</div></html>")
+
+    panel = JPanel()
+    gb = GridBagLayout()
+    panel.setLayout(gb)
+    pc = GridBagConstraints()
+    pc.anchor = GridBagConstraints.CENTER
+    pc.fill = GridBagConstraints.BOTH
+
+    text = JLabel(html)
+    pc.gridx, pc.gridy, pc.gridheight, pc.gridwidth, pc.weightx, pc.weighty = 0, 0, 1, 2, 1, 1
+    gb.setConstraints(text, pc)
+    panel.add(text)
+
+    button = JButton("Open GitHub instructions", actionPerformed = _cellpose_open_github)
+    pc.gridx, pc.gridy, pc.gridheight, pc.gridwidth, pc.weightx, pc.weighty = 0, 1, 1, 1, 1, 1
+    gb.setConstraints(button, pc)
+    panel.add(button)
+
+    button = JButton("Close", actionPerformed = _cellpose_close_instructions)
+    pc.gridx, pc.gridy, pc.gridheight, pc.gridwidth, pc.weightx, pc.weighty = 1, 1, 1, 1, 1, 1
+    gb.setConstraints(button, pc)
+    panel.add(button)
+
+    global cellpose_instruction_frame
+    cellpose_instruction_frame = JFrame("Cellpose Instructions")
+    cellpose_instruction_frame.getContentPane().add(panel)
+    cellpose_instruction_frame.pack()
+    cellpose_instruction_frame.setLocationRelativeTo(None)
+    cellpose_instruction_frame.setVisible(True)
     
 ######################################################### Main UI ###############################################################
 
