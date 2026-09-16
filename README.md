@@ -38,6 +38,21 @@ Every route runs **inside Fiji** except the deep-learning segmentation (Cellpose
 
 ---
 
+## Three ways to run fishROI
+
+fishROI is one tool with three separate interfaces over the **same** pipeline — pick whichever fits:
+
+| Interface | What it is | Best for |
+|---|---|---|
+| **Interactive Fiji plugin (GUI)** — [§3](#3-the-manual-workflow-fiji-gui) | The manual, click-through workflow (`fishROI_v1.py`) | Exploring, ROI curation, figure-making |
+| **Headless pipeline (CLI / HPC)** — [§4](#4-the-headless-pipeline) | The same steps scripted, no GUI (`automation/`) | Batch runs, reproducibility, clusters |
+| **Claude skill** — [§5](#5-the-claude-skill) | An AI assistant that installs dependencies and runs it for you (`skill/fishroi/`) | Hands-off setup and running, no coding |
+
+The GUI plugin is the published tool; the headless pipeline and Claude skill are complementary
+automation layers, not a different version of it.
+
+---
+
 ## 1. Requirements & dependencies
 
 | Dependency | Needed for | Install link |
@@ -118,7 +133,7 @@ python -m pip install "cellpose<4"
 best zebrafish accuracy, download the authors' custom **`rerio`** model from Zenodo
 (https://doi.org/10.5281/zenodo.19223252), note its **path on disk**, and point `run_cellpose.py` at
 it. Full parameters and the FIJI round-trip are in
-[`skill/fishROI_v2/references/cellpose-cli.md`](skill/fishROI_v2/references/cellpose-cli.md).
+[`skill/fishroi/references/cellpose-cli.md`](skill/fishroi/references/cellpose-cli.md).
 
 ### 2.4 Julia — Step 4 *(CoV / mosaicism, optional)*
 
@@ -138,11 +153,11 @@ it. Full parameters and the FIJI round-trip are in
    ```
 4. `exit()`. This one-time setup is per machine. Setting `ENV["PYTHON"]=""` **before**
    `Pkg.build("PyCall")` is the critical step. Details + troubleshooting:
-   [`skill/fishROI_v2/references/julia-mosaicism.md`](skill/fishROI_v2/references/julia-mosaicism.md).
+   [`skill/fishroi/references/julia-mosaicism.md`](skill/fishroi/references/julia-mosaicism.md).
 
 ---
 
-## 3. The workflow (interactive GUI)
+## 3. The manual workflow (Fiji GUI)
 
 The plugin opens as a single modular panel: the four numbered **Steps** run top-to-bottom, and you
 only use the panels you need. The button and field names below match the interface exactly.
@@ -226,7 +241,7 @@ CoV is computed in a sliding window of radius **3× the mean Feret diameter**; e
 
 ---
 
-## 4. Headless automation (batch / reproducible)
+## 4. The headless pipeline
 
 The whole pipeline can run **without the GUI** — one command does segment → Fiji-identical measure →
 area heatmap → Julia CoV. The rerio model is fetched + checksum-verified automatically; Fiji is
@@ -257,27 +272,39 @@ python automation/fishroi_run_all.py --image img.tif --outdir out/ --roizip out/
 - **No Fiji?** `automation/fishroi_auto.py` is a pure-Python fallback (scikit-image measurements,
   ~5–10 % off the plugin's absolute area/circularity; CoV ~2 %). Use `fishroi_run_all.py` for
   plugin-identical numbers.
-- **Claude skill:** [`skill/fishROI_v2/`](skill/fishROI_v2/) walks an AI agent (or a person) through
-  installation and the whole workflow, including dependency setup — no coding experience required.
+- **Prefer a hands-off run?** An AI-guided **Claude skill** automates all of this — see §5.
 
 ---
 
-## 5. Detailed references & troubleshooting
+## 5. The Claude skill
+
+For a hands-off experience the repo ships a **Claude skill** — an AI assistant that reads your
+intent, installs the right dependencies, and runs the appropriate route (GUI, headless, or HPC) for
+you, with no coding required. It lives in [`skill/fishroi/`](skill/fishroi/) (a router `SKILL.md`
+plus the reference docs below).
+
+- **In Claude Code or the Claude app:** open this repo and ask for fishROI — the skill triggers on
+  muscle-morphometry / fishROI requests and walks you through setup and each analysis step.
+- It covers the same Steps 1–4 as the GUI and can drive the headless pipeline in §4.
+
+---
+
+## 6. Detailed references & troubleshooting
 
 Deep-dive docs (setup, every button, and troubleshooting tables) live under
-[`skill/fishROI_v2/references/`](skill/fishROI_v2/references/):
+[`skill/fishroi/references/`](skill/fishroi/references/):
 
 | Topic | Doc |
 |---|---|
-| Fiji plugin + Labkit, GUI map, Steps 1–4 | [`fiji-setup.md`](skill/fishROI_v2/references/fiji-setup.md) |
-| Cellpose install, model, parameters, round-trip | [`cellpose-cli.md`](skill/fishROI_v2/references/cellpose-cli.md) |
-| Julia environment, input code, outputs | [`julia-mosaicism.md`](skill/fishROI_v2/references/julia-mosaicism.md) |
-| Headless pipeline internals & fidelity | [`automation.md`](skill/fishROI_v2/references/automation.md) |
-| Biology / method background | [`background.md`](skill/fishROI_v2/references/background.md) |
+| Fiji plugin + Labkit, GUI map, Steps 1–4 | [`fiji-setup.md`](skill/fishroi/references/fiji-setup.md) |
+| Cellpose install, model, parameters, round-trip | [`cellpose-cli.md`](skill/fishroi/references/cellpose-cli.md) |
+| Julia environment, input code, outputs | [`julia-mosaicism.md`](skill/fishroi/references/julia-mosaicism.md) |
+| Headless pipeline internals & fidelity | [`automation.md`](skill/fishroi/references/automation.md) |
+| Biology / method background | [`background.md`](skill/fishroi/references/background.md) |
 
 ---
 
-## 6. Citation
+## 7. Citation
 
 If you use fishROI, please cite:
 

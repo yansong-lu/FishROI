@@ -1,5 +1,5 @@
 ---
-name: fishROI_v2
+name: fishroi
 description: >
   Guides users through the FishROI pipeline for semi-automated muscle morphometry / ROI analysis in
   teleost fish (validated in zebrafish): a FIJI (ImageJ2) Jython plugin plus optional Cellpose

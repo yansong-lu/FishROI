@@ -21,7 +21,7 @@ plugin, this repo provides **headless automation**, **HPC batch tooling**, and a
   - `fishroi_curate.py` — FIJI GUI cleanup tools for manual ROI curation.
   - `fetch_model.py`, `fiji_setup.py` — auto-fetch the rerio model / find-or-install Fiji.
   - `hpc/` — generic SLURM: GPU segment array → CPU analyze array.
-- `skill/fishROI_v2/` — the Claude skill (router `SKILL.md` + `references/`, incl. `paper-summary.md`).
+- `skill/fishroi/` — the Claude skill (router `SKILL.md` + `references/`, incl. `paper-summary.md`).
 - `example_outputs/` — sample figures.
 
 ## Run
