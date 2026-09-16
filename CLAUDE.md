@@ -8,7 +8,7 @@ fishROI is a FIJI2/Jython workflow for **semi-automated muscle morphometry in te
 coefficient-of-variation (CoV) maps that quantify mosaic hyperplasia. Alongside the interactive
 plugin, this repo provides **headless automation**, **HPC batch tooling**, and a **Claude skill**.
 
-- Paper: https://doi.org/10.64898/2026.03.27.714781
+- Paper: Lu et al., *Skeletal Muscle* (2026). https://doi.org/10.1186/s13395-026-00449-y
 - Models + test images (Zenodo): https://doi.org/10.5281/zenodo.19223252
 
 ## Layout

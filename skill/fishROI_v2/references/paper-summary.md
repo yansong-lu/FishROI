@@ -1,12 +1,12 @@
-# Paper summary — fishROI (Lu et al., bioRxiv 2026)
+# Paper summary — fishROI (Lu et al., Skeletal Muscle 2026)
 
-Condensed summary of the preprint, for explaining the science and design decisions behind the tool.
+Condensed summary of the paper, for explaining the science and design decisions behind the tool.
 This complements `background.md` (method-choice guidance) with the paper's findings, evidence, and
 numbers. Quote sparingly; cite the DOI.
 
-- **Citation:** Lu Y, Pan M, Jamwal V, Locop J, Ruparelia A, Currie P. *fishROI: A specialized
-  workflow for semi-automated muscle morphometry analysis in teleosts.* bioRxiv 2026.03.27.714781.
-  doi: https://doi.org/10.64898/2026.03.27.714781 (posted 2026-03-30). CC-BY-NC-ND 4.0.
+- **Citation:** Lu Y, Pan M, Jamwal V, Rahman PHA, Locop J, Ruparelia AA, Currie PD. *fishROI: a
+  specialized workflow for semi-automated muscle morphometry analysis in teleosts.* Skeletal Muscle.
+  2026. doi: https://doi.org/10.1186/s13395-026-00449-y (published 2026-09-16). Open access.
 - **Authors/affiliations:** Monash University (ARMI; EMBL Australia), University of Melbourne, MDI
   Biological Laboratories. Corresponding: Yansong Lu & Peter Currie. Contact: KLu@stowers.org /
   yansong.lu@monash.edu.

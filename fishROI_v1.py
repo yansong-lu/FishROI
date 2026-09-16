@@ -992,7 +992,29 @@ def make_scalebar_button(event):
     IJ.log("Generating scalebar, please wait.")
 
 def cellpose_instruction_button(event):
-    IJ.log("Feature in development.")
+    """Show a summary of the standalone Cellpose (deep-learning) route and link to full instructions."""
+    # Cellpose runs outside FIJI; this button summarises the round-trip and links to the online manual.
+    repo_url = r"https://github.com/yansong-lu/FishROI"
+    steps = (
+        "Cellpose (deep-learning segmentation) runs OUTSIDE FIJI; its ROIs are then loaded back in.\n \n"
+        "1. Install Cellpose in a Python environment (pin cellpose<4):\n"
+        "       pip install \"cellpose<4\"\n"
+        "   Install guide: https://github.com/MouseLand/cellpose\n"
+        "2. Get a model: start with the stock 'cyto3', or download our zebrafish 'rerio'\n"
+        "   model from Zenodo: https://doi.org/10.5281/zenodo.19223252\n"
+        "3. Edit the parameter block at the top of run_cellpose.py (input/output folders,\n"
+        "   segmentation channel, and the model path), then run:  python run_cellpose.py\n"
+        "   It writes ImageJ-format ROI .zip files (one per image).\n"
+        "4. Back in FIJI: open the ORIGINAL image, then ROI Manager -> More >> -> Open the\n"
+        "   matching ROI .zip, and continue with Step 2 (cleanup) / Step 3 / Step 4.\n \n"
+        "To TRAIN your own model, use 'Convert ROI to Mask' to export curated ROIs as label-mask\n"
+        "PNGs. Full instructions: click Help below, or see run_cellpose.py and the user manual on GitHub."
+    )
+    IJ.log(steps)
+    gd = NonBlockingGenericDialog("Cellpose Instructions")
+    gd.addHelp(repo_url)
+    gd.addMessage(steps)
+    gd.showDialog()
     
 ######################################################### Main UI ###############################################################
 
