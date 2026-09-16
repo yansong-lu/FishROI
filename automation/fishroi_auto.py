@@ -8,9 +8,9 @@ scripted on a workstation or an HPC node.
 
 Design notes:
   * Segmentation is pluggable. The DEEP-LEARNING backend calls genuine Cellpose exactly as
-    run_cellpose.py does, using a LOCAL model file (e.g. the Zenodo 'rerio' model) so nothing is
-    downloaded at runtime. If no --model is given, it falls back to a classical watershed
-    stand-in (lower quality; a warning is printed).
+    run_cellpose.py does, using a LOCAL model file (e.g. the Zenodo 'rerio' model). This is the
+    intended route for real analysis. A classical watershed stand-in also exists for smoke-testing
+    only; it is gated behind --allow-watershed and is much lower quality than Cellpose.
   * The CoV step is a faithful port of MuscleMosaicism_v3.jl (window_radius = 3x mean Feret,
     step = window_radius/10, NaN where a window holds < 5 fibres, CoV = sigma/mu).
   * ROIs are written in ImageJ .zip format (via roifile), so outputs are interoperable with the
@@ -25,7 +25,7 @@ Deps (all on PyPI, no conda):
     # deep-learning backend additionally:  pip install cellpose torch
 Usage:
     python fishroi_auto.py --image sample_2.tif --outdir out/ \
-        --model /path/to/rerio            # omit --model to use watershed fallback
+        --model auto                      # fetch + use the rerio Cellpose model (recommended)
         [--seg-channel max|1] [--diameter 0] [--min-area-um2 1.5] \
         [--lut viridis] [--gamma 0.6]
 """
@@ -260,7 +260,7 @@ def main():
     ap.add_argument("--image", required=True)
     ap.add_argument("--outdir", default="fishroi_out")
     ap.add_argument("--model", default=None,
-                    help="local Cellpose model path, or 'auto' to fetch rerio (omit -> watershed fallback)")
+                    help="local Cellpose model path, or 'auto' to fetch the rerio model (recommended)")
     ap.add_argument("--seg-channel", default="max", help="'max' or 1-based channel index")
     ap.add_argument("--diameter", type=float, default=0.0, help="Cellpose diameter px (0=auto)")
     ap.add_argument("--min-area-um2", type=float, default=1.5, help="watershed min fibre area")
@@ -269,6 +269,9 @@ def main():
     ap.add_argument("--gamma", type=float, default=0.6, help="gamma (only for non-phase mpl cmaps)")
     ap.add_argument("--segment-only", action="store_true", help="run segmentation, save labels, exit")
     ap.add_argument("--labels-npy", default=None, help="skip segmentation; load labels from this .npy")
+    ap.add_argument("--allow-watershed", action="store_true",
+                    help="TESTING ONLY: use the low-quality classical watershed stand-in when no "
+                         "--model is given. Not for real analysis -- use --model auto for Cellpose.")
     a = ap.parse_args()
     os.makedirs(a.outdir, exist_ok=True)
     base = os.path.splitext(os.path.basename(a.image))[0]
@@ -288,8 +291,13 @@ def main():
             a.model = resolve_model(a.model)
             print("model -> %s" % a.model)
         labels = segment_cellpose(stack, a.seg_channel, a.model, a.diameter)
-    else:
+    elif a.allow_watershed:
+        # TESTING ONLY: classical stand-in, far lower quality than Cellpose (see --allow-watershed).
         labels = segment_watershed(stack, a.seg_channel, pixel_um, a.min_area_um2)
+    else:
+        sys.exit("No segmentation model given. Use --model auto to fetch and use the rerio Cellpose "
+                 "model (recommended), --model /path/to/model for your own, or --labels-npy to reuse "
+                 "saved labels. The watershed stand-in is testing-only (--allow-watershed).")
     n = len(np.unique(labels)) - 1
     print("segmented %d fibres  (%.1fs)" % (n, time.time() - t0))
     if n == 0:

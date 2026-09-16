@@ -96,7 +96,8 @@ pip install tifffile numpy pandas scikit-image scipy matplotlib roifile opencv-p
 pip install "cellpose<4" torch      # for the deep-learning backend (pin <4: 4.x = SAM)
 
 python fishroi_auto.py --image sample_2.tif --outdir out/ --model auto
-# --model auto fetches rerio to the cache; omit --model entirely -> watershed fallback (testing only)
+# --model auto fetches rerio to the cache (recommended). Without a model the run errors; the
+# watershed stand-in is testing-only and must be requested explicitly with --allow-watershed.
 ```
 
 Its area heatmap now **defaults to the same paper LUT + scale bar** as the FIJI path

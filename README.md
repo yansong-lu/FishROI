@@ -269,9 +269,10 @@ python automation/fishroi_run_all.py --image img.tif --outdir out/ --roizip out/
 
 - **HPC:** `automation/hpc/` has SLURM templates (GPU segment array → CPU analyze array) — see
   [`automation/hpc/README.md`](automation/hpc/README.md).
-- **No Fiji?** `automation/fishroi_auto.py` is a pure-Python fallback (scikit-image measurements,
-  ~5–10 % off the plugin's absolute area/circularity; CoV ~2 %). Use `fishroi_run_all.py` for
-  plugin-identical numbers.
+- **No Fiji?** `automation/fishroi_auto.py --model auto` runs the same Cellpose segmentation but
+  measures with scikit-image instead of Fiji (~5–10 % off the plugin's absolute area/circularity;
+  CoV ~2 %). Use `fishroi_run_all.py` for plugin-identical numbers. *(A watershed stand-in exists
+  for smoke-testing only, behind `--allow-watershed`; it is not for real analysis.)*
 - **Prefer a hands-off run?** An AI-guided **Claude skill** automates all of this — see §5.
 
 ---
